@@ -126,6 +126,9 @@ compile_mx8x() {
     fi
 }
 do_compile() {
+    # mkimage_uboot requires libssl.so/libcrypto.so from ${STAGING_LIBDIR_NATIVE}
+    export LD_LIBRARY_PATH=${STAGING_LIBDIR_NATIVE}:$LD_LIBRARY_PATH
+
     # mkimage for i.MX8
     # Copy TEE binary to SoC target folder to mkimage
     if ${DEPLOY_OPTEE}; then
@@ -165,7 +168,6 @@ deploy_mx8m() {
     install -m 0644 ${BOOT_STAGING}/signed_hdmi_imx8m.bin    ${DEPLOYDIR}/${BOOT_TOOLS}
     install -m 0755 ${BOOT_STAGING}/${TOOLS_NAME}            ${DEPLOYDIR}/${BOOT_TOOLS}
     install -m 0755 ${BOOT_STAGING}/mkimage_fit_atf.sh       ${DEPLOYDIR}/${BOOT_TOOLS}
-    install -m 0755 ${BOOT_STAGING}/mkimage_uboot            ${DEPLOYDIR}/${BOOT_TOOLS}
 }
 deploy_mx8() {
     install -d ${DEPLOYDIR}/${BOOT_TOOLS}
